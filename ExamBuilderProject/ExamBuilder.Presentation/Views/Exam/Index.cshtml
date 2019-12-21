@@ -1,0 +1,46 @@
+﻿@model Exam
+@using ExamBuilder.Entities
+<!DOCTYPE html>
+@{ int i = 0; Layout = null;}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <div class="row float-right w-100">
+            @Html.ActionLink("Yeni Oluştur", "Create", "Exam", null, new { @class = "btn btn-light" })
+        </div>
+        <div class="row w-100">
+            <table class="table w-100">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Başlık</th>
+                        <th>Tarih</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.Exams)
+                    {
+                        <tr style="cursor:pointer;" onclick="displayTheExam(@item.Id)">
+                            <td>@Html.Raw(++i)</td>
+                            <td>@item.Title</td>
+                            <td>@item.ModifiedDate</td>
+                            <td>@Html.ActionLink("Sil", "Delete", "Exam", new { id = item.Id })</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+</script>

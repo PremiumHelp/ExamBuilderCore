@@ -1,0 +1,101 @@
+﻿@model Exam
+@using ExamBuilder.Entities
+@inject IJsonHelper Json
+@{
+    var optionTag = new List<object>
+{
+        new { Tag = "A", Id = 1 },
+        new { Tag = "B", Id = 2 },
+        new { Tag = "C", Id = 3 },
+        new { Tag = "D", Id = 4 }
+    };
+    int i = 0, j = 0;
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Take</title>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <h1>@Model.Title</h1>
+        </div>
+        <div class="row">
+            <h1 class="h4">@Model.Description</h1>
+        </div>
+        <div class="questions row">
+            @{ i = 0;}
+            @foreach (var question in Model.Questions)
+            {
+                <div class="question">
+                    <div class="text">
+                        <strong>@Html.Raw(++i)) @question.Text</strong>
+                    </div>
+                    <div class="options d-flex flex-column">
+                        @{ j = 0;}
+                        @foreach (var item in question.Options)
+                        {
+                            <div class="option d-flex" style="cursor:pointer;" onclick="checkResult(@question.Answer,@Html.Raw(j+1),@i)" id="@i-@Html.Raw(j+1)">
+                                <div class="col-1">
+                                    <strong>
+                                        @Html.Raw(((dynamic)optionTag[j++]).Tag))
+                                    </strong>
+                                </div>
+                                <div class="col-11">
+                                    @item.Text
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="row d-flex justify-content-center">
+            <input type="button" class="btn btn-light border-dark" id="btn_done" value="SINAVI TAMAMLA" />
+        </div>
+    </div>
+</body>
+</html>
+
+<style>
+    .questions, .options {
+        min-height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+    }
+
+    .option:hover {
+        background-color: #E2E6EA;
+    }
+
+    .option > div {
+        display: flex;
+        flex-basis: calc(50% - 40px);
+        justify-content: center;
+        flex-direction: row;
+        padding: 5px;
+    }
+
+    .question {
+        margin: 20px;
+    }
+</style>
+
+<script>
+    function checkResult(correctAnswer, selectionAnswer, questionId) {
+        console.log($('.options > #' + questionId + '-' + correctAnswer))
+        $('.options > #' + questionId + '-' + correctAnswer).addClass('bg-warning');
+        if (correctAnswer != selectionAnswer) {
+            $('.options > #' + questionId + '-' + selectionAnswer).addClass('bg-danger');
+        }
+    }
+</script>
