@@ -8,7 +8,7 @@ namespace ExamBuilder.Entities
     public class User : IEntity
     {
         public int Id { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         [Required, DataType(DataType.Text)]
@@ -16,6 +16,6 @@ namespace ExamBuilder.Entities
         [Required, DataType(DataType.Password)]
         public string Password { get; set; }
 
-        public virtual IEnumerable<Exam> Exams { get; set; }
+        public virtual List<Exam> Exams { get; set; }
     }
 }

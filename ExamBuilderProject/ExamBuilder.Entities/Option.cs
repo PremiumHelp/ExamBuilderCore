@@ -7,12 +7,11 @@ namespace ExamBuilder.Entities
     {
         public int Id { get; set; }
         public int QuestionId { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         [Required, DataType(DataType.Text)]
         public string Text { get; set; }
-        public bool IsCorrect { get; set; }
 
         public virtual Question Question { get; set; }
     }

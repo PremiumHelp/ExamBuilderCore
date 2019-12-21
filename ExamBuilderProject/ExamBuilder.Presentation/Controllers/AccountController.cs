@@ -12,19 +12,18 @@ namespace ExamBuilder.Presentation.Controllers
     public class AccountController : Controller
     {
         private readonly IUserBusiness _userBusiness;
-        public AccountController(IUserBusiness userBusiness)
+        private IHttpContextAccessor HttpContextAccessor;
+        public AccountController(IUserBusiness userBusiness, IHttpContextAccessor httpContextAccessor)
         {
             _userBusiness = userBusiness;
+            HttpContextAccessor = httpContextAccessor;
         }
         public IActionResult Login()
         {
-            var user = new User
+            if (HttpContext.Session.Keys.Any())
             {
-                UserName = "erdem123",
-                Password = "erdem321"
-            };
-
-            _userBusiness.Add(user);
+                return RedirectToAction("Index", "Exam");
+            }
             return View();
         }
 
@@ -36,11 +35,31 @@ namespace ExamBuilder.Presentation.Controllers
             var matchedUser = _userBusiness.GetBy(user.UserName, user.Password);
             if (matchedUser != null && matchedUser.IsActive)
             {
-                HttpContext.Session.SetString("User", user.UserName);
+                HttpContextAccessor.HttpContext.Session.SetInt32("User", matchedUser.Id);
                 return RedirectToAction("Index", "Exam");
             }
             ViewBag.Message = "Kullanıcı Bulunamadı.";
             return View();
+        }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Register(User user)
+        {
+            if (!ModelState.IsValid)
+                return View("Login", user);
+
+            var processResult = _userBusiness.Add(user);
+            if (!processResult.IsSuccess)
+            {
+                ViewBag.Message = "Kayıt işlemi başarısız.";
+                return View("Login", user);
+            }
+            ViewBag.Message = "Kayıt işlemi başarılı! Lütfen Giriş yapınız";
+            return RedirectToAction("Login");
         }
     }
 }

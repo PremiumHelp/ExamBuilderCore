@@ -9,7 +9,7 @@ namespace ExamBuilder.Entities
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         [Required, DataType(DataType.Text)]
@@ -18,6 +18,6 @@ namespace ExamBuilder.Entities
         public string Description { get; set; }
 
         public virtual User User { get; set; }
-        public virtual IEnumerable<Question> Questions { get; set; }
+        public virtual List<Question> Questions { get; set; }
     }
 }

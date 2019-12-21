@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExamBuilder.DataAccess.Migrations
 {
     [DbContext(typeof(ExamBuilderDbContext))]
-    [Migration("20191220213340_InitialMigration")]
+    [Migration("20191221165857_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,9 +63,6 @@ namespace ExamBuilder.DataAccess.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("TEXT");
 
@@ -87,6 +84,9 @@ namespace ExamBuilder.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Answer")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedDate")

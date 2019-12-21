@@ -67,6 +67,23 @@ namespace ExamBuilder.Business
             return result;
         }
 
+        public ProcessResult Delete(int id)
+        {
+            ProcessResult result = new ProcessResult();
+            _uow.Users.Delete(id);
+            try
+            {
+                _uow.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+
         public ProcessResult Update(User user)
         {
             ProcessResult result = new ProcessResult();
@@ -88,6 +105,7 @@ namespace ExamBuilder.Business
     {
         ProcessResult Add(User user);
         ProcessResult Delete(User user);
+        ProcessResult Delete(int id);
         User Get(int id);
         User GetBy(string userName, string password);
         IEnumerable<User> GetAll();

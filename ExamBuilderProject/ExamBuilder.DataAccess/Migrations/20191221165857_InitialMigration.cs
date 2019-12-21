@@ -55,6 +55,7 @@ namespace ExamBuilder.DataAccess.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     ExamId = table.Column<int>(nullable: false),
+                    Answer = table.Column<int>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     ModifiedDate = table.Column<DateTime>(nullable: false),
@@ -81,8 +82,7 @@ namespace ExamBuilder.DataAccess.Migrations
                     IsActive = table.Column<bool>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     ModifiedDate = table.Column<DateTime>(nullable: false),
-                    Text = table.Column<string>(nullable: false),
-                    IsCorrect = table.Column<bool>(nullable: false)
+                    Text = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {

@@ -9,8 +9,6 @@ namespace ExamBuilder.DataAccess.Context
 {
     public class ExamBuilderDbContext : DbContext, IExamBuilderDbContext
     {
-        //public ExamBuilderDbContext(DbContextOptions options) : base(options) { }
-
         public DbSet<User> Users { get; set; }
         public DbSet<Exam> Exams { get; set; }
         public DbSet<Question> Questions { get; set; }
@@ -20,16 +18,8 @@ namespace ExamBuilder.DataAccess.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
             optionsBuilder.UseSqlite($"Data Source = {GetDirectory()}\\ExamBuilder.db");
-        }
-
-        private string GetDirectory()
-        {
-            var layerName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
-            var directories = Directory.GetCurrentDirectory().Split('\\');
-            directories.SetValue(layerName, directories.Length - 1);
-            return string.Join('\\', directories);
+            optionsBuilder.UseLazyLoadingProxies();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -57,6 +47,14 @@ namespace ExamBuilder.DataAccess.Context
                 }
             }
             return base.SaveChanges();
+        }
+
+        private string GetDirectory()
+        {
+            var layerName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+            var directories = Directory.GetCurrentDirectory().Split('\\');
+            directories.SetValue(layerName, directories.Length - 1);
+            return string.Join('\\', directories);
         }
     }
 }

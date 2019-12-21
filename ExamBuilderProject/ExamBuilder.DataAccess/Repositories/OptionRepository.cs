@@ -43,6 +43,17 @@ namespace ExamBuilder.DataAccess.Repositories
             entity.IsActive = false;
             Update(entity);
         }
+
+        public void Delete(int id)
+        {
+            var entity = Get(id);
+            if (entity == null)
+                return;
+
+            entity.IsActive = false;
+            Update(entity);
+        }
+
         public Option Get(Expression<Func<Option, bool>> predicate)
         {
             return _dbSet.Find(predicate);
@@ -73,6 +84,7 @@ namespace ExamBuilder.DataAccess.Repositories
     {
         void Add(Option entity);
         void Delete(Option entity);
+        void Delete(int id);
         Option Get(Expression<Func<Option, bool>> predicate);
         Option Get(int id);
         IEnumerable<Option> GetAll();

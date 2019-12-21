@@ -1,0 +1,143 @@
+﻿@*@model ExamViewModel*@
+@model Exam
+@using ExamBuilder.Entities
+@using ExamBuilder.Presentation.Models
+@inject IJsonHelper Json
+@{
+    var optionTag = new List<object>
+{
+        new { Tag = "A", Id = 1 },
+        new { Tag = "B", Id = 2 },
+        new { Tag = "C", Id = 3 },
+        new { Tag = "D", Id = 4 }
+    };
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container align-items-center">
+        @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
+        {
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Uyarı!</strong> @ViewBag.Message
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+        @using (Html.BeginForm("Create", "Exam", FormMethod.Post))
+        {
+            <div class="title d-block">
+                <div class="title-description row">
+                    <label class="float-left"><strong>Yazı</strong></label>
+                </div>
+                <div class="title-selection row">
+                    <select class="form-control select-title" name="Exam.Title" required>
+                        <option>Select an option...</option>
+                        @foreach (var item in ViewBag.Wireds)
+                        {
+                            <option value="@item.Id">
+                                @item.Title
+                            </option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="description row mt-2">
+                <textarea class="form-control h-auto description-area" name="Exam.Description"></textarea>
+            </div>
+            <div class="questions">
+                @for (int i = 0; i < 4; i++)
+                {
+                    <div class="question">
+                        <div class="text d-flex flex-row">
+                            <div class="col-1"><strong>Soru @Html.Raw(i + 1)</strong></div>
+                            <div class="col-11">
+                                <input type="text" class="form-control" name="Exam.Questions[@i].Text" required />
+                            </div>
+                        </div>
+                        <div class="options">
+                            @for (int j = 0; j < 4; j++)
+                            {
+                                <div class="option">
+                                    <div class="col-1">
+                                        <strong>
+                                            @Html.Raw(((dynamic)optionTag[j]).Tag)
+                                        </strong>
+                                    </div>
+                                    <div class="col-11">
+                                        <input type="text" class="form-control" name="Exam.Questions[@i].Options[@j].Text" required />
+                                    </div>
+                                </div>
+                            }
+                            <select class="form-control" name="Exam.Questions[@i].Answer" required>
+                                <option>Doğru seçeneği belirtiniz...</option>
+                                <option value="1">A</option>
+                                <option value="2">B</option>
+                                <option value="3">C</option>
+                                <option value="4">D</option>
+                            </select>
+                        </div>
+                    </div>
+                }
+            </div>
+            <input type="hidden" name="Exam.UserId" value="@ViewBag.UserId" />
+            <div class="d-flex justify-content-center">
+                <input type="submit" class="btn btn-link mt-2" value="SINAVI OLUŞTUR" />
+            </div>
+        }
+    </div>
+</body>
+</html>
+
+<script>
+    $('.select-title').change(function () {
+        var items =@Json.Serialize(ViewBag.Wireds);
+        $('.description-area')
+            .empty()
+            .append(items[$(this).val()].description);
+    });
+
+    $('.btn').on('click', function () {
+        var option = $('.select-title option:selected');
+        option.val(option.text());
+    })
+</script>
+
+<style>
+    .questions {
+        margin-top: 10px;
+    }
+
+    .options {
+        min-height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+    }
+
+        .options > div {
+            display: flex;
+            flex-basis: calc(50% - 40px);
+            justify-content: center;
+            flex-direction: row;
+        }
+
+    .option {
+        margin: 20px 0 20px 0;
+    }
+
+    .questions, .options {
+        border: 1px solid;
+    }
+</style>

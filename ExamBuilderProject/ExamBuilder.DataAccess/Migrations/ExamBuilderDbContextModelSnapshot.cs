@@ -61,9 +61,6 @@ namespace ExamBuilder.DataAccess.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("TEXT");
 
@@ -85,6 +82,9 @@ namespace ExamBuilder.DataAccess.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Answer")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedDate")
